@@ -1,45 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Smart Orchard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Smart Orchard AI</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
             margin: 0;
             font-family: "Segoe UI", system-ui, Arial, sans-serif;
-            background: linear-gradient(135deg, #2e7d32 0%, #66bb6a 50%, #a5d6a7 100%);
+            background: linear-gradient(145deg, #1b5e20 0%, #43a047 40%, #81c784 100%);
             min-height: 100vh;
             color: #333;
-            padding: 24px 16px;
+            padding: 28px 16px 48px;
         }
 
         .container {
-            max-width: 520px;
-            margin: 40px auto;
+            max-width: 540px;
+            margin: 0 auto;
             background: #fff;
-            padding: 36px 32px;
-            border-radius: 20px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06);
+            padding: 36px 28px 40px;
+            border-radius: 22px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08);
             text-align: center;
         }
 
-        h2 {
-            margin: 0 0 8px 0;
-            font-size: 1.65rem;
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1b5e20;
         }
 
         .subtitle {
             font-size: 14px;
-            color: #666;
+            color: #555;
             margin: 0 0 28px 0;
-            line-height: 1.5;
+            line-height: 1.55;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Hide native file input */
+        .section-title {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #888;
+            margin: 20px 0 10px 0;
+        }
+
         .file-input-hidden {
             position: absolute;
             width: 1px;
@@ -55,168 +66,234 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 8px;
+            gap: 10px;
+            margin-bottom: 4px;
         }
 
         .upload-label {
             display: inline-block;
-            padding: 14px 32px;
-            font-size: 16px;
+            padding: 14px 28px;
+            font-size: 15px;
             font-weight: 600;
             color: #fff;
-            background: linear-gradient(135deg, #43a047, #66bb6a);
+            background: linear-gradient(135deg, #2e7d32, #66bb6a);
             border-radius: 14px;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(67, 160, 71, 0.35);
+            box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .upload-label:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 28px rgba(67, 160, 71, 0.45);
+            box-shadow: 0 12px 32px rgba(46, 125, 50, 0.45);
         }
 
         .file-name {
             font-size: 13px;
-            color: #555;
+            color: #666;
             margin: 0;
-            min-height: 1.3em;
+            min-height: 1.35em;
             word-break: break-all;
             max-width: 100%;
         }
 
-        .actions {
-            margin-top: 20px;
+        .preview-wrap {
+            margin-top: 22px;
+            min-height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #preview {
+            display: none;
+            max-width: 100%;
+            width: 280px;
+            height: auto;
+            border-radius: 16px;
+            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.14);
+            object-fit: cover;
+        }
+
+        #preview.visible {
+            display: block;
+        }
+
+        .preview-placeholder {
+            font-size: 13px;
+            color: #aaa;
+            padding: 24px 16px;
         }
 
         #detectBtn {
-            padding: 14px 36px;
-            font-size: 16px;
+            margin-top: 22px;
+            padding: 14px 32px;
+            font-size: 15px;
             font-weight: 600;
             border: none;
             border-radius: 14px;
-            background: linear-gradient(135deg, #2e7d32, #43a047);
+            background: linear-gradient(135deg, #1b5e20, #388e3c);
             color: #fff;
             cursor: pointer;
-            box-shadow: 0 6px 20px rgba(46, 125, 50, 0.3);
-            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+            box-shadow: 0 8px 24px rgba(27, 94, 32, 0.35);
+            transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
         }
 
         #detectBtn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 10px 26px rgba(46, 125, 50, 0.4);
+            box-shadow: 0 12px 30px rgba(27, 94, 32, 0.4);
         }
 
         #detectBtn:disabled {
-            opacity: 0.65;
+            opacity: 0.6;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
 
-        #preview {
-            margin-top: 24px;
-            width: 100%;
-            max-width: 280px;
-            height: auto;
-            border-radius: 14px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            object-fit: cover;
-        }
-
         #output {
-            margin-top: 28px;
-            font-size: 15px;
+            margin-top: 26px;
+            text-align: left;
+            font-size: 14px;
         }
 
         .result-card {
-            margin-top: 8px;
-            padding: 24px;
-            border-radius: 16px;
-            text-align: left;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+            padding: 22px 20px;
+            border-radius: 18px;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06), 0 8px 28px rgba(0, 0, 0, 0.1);
         }
 
         .result-card.healthy {
             background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
             color: #1b5e20;
-            border: 1px solid #a5d6a7;
         }
 
         .result-card.disease {
             background: linear-gradient(180deg, #ffebee 0%, #ffcdd2 100%);
             color: #b71c1c;
-            border: 1px solid #ef9a9a;
         }
 
-        .result-card.uncertain {
-            background: linear-gradient(180deg, #fffde7 0%, #fff9c4 100%);
-            color: #f57f17;
+        .result-card.warn {
+            background: linear-gradient(180deg, #fff8e1 0%, #ffecb3 100%);
+            color: #e65100;
             border: 1px solid #ffe082;
         }
 
-        .disease-name {
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin: 0 0 6px 0;
-            line-height: 1.3;
+        .result-card.invalid {
+            background: #fce4ec;
+            color: #880e4f;
+            border: 1px solid #f48fb1;
         }
 
-        .friendly-note {
-            font-size: 14px;
+        .result-head {
+            font-size: 1.35rem;
+            font-weight: 700;
             margin: 0 0 16px 0;
-            opacity: 0.95;
-            line-height: 1.5;
+            line-height: 1.25;
         }
 
         .row {
-            margin: 12px 0;
-            font-size: 14px;
+            margin: 14px 0 0 0;
             line-height: 1.5;
         }
 
-        .row .label {
+        .row .lbl {
             display: block;
-            font-size: 12px;
+            font-size: 11px;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.06em;
             opacity: 0.85;
             margin-bottom: 4px;
         }
 
-        .row strong {
-            font-size: 16px;
+        .row .val {
+            font-size: 15px;
+        }
+
+        .top2-list {
+            margin: 6px 0 0 0;
+            padding-left: 18px;
+        }
+
+        .top2-list li {
+            margin: 6px 0;
+        }
+
+        .loading-msg {
+            text-align: center;
+            color: #555;
+            padding: 16px;
+            font-weight: 500;
+        }
+
+        .err-box {
+            padding: 18px;
+            border-radius: 14px;
+            background: #ffebee;
+            color: #c62828;
+            text-align: center;
         }
     </style>
 </head>
-
 <body>
 
 <div class="container">
-    <h2>Smart Orchard AI</h2>
-    <p class="subtitle">Detect apple leaf diseases and get instant treatment advice</p>
+    <h1>Smart Orchard AI</h1>
+    <p class="subtitle">Upload a close-up of an apple leaf for disease screening and simple care steps.</p>
 
+    <p class="section-title">1 · Photo</p>
     <div class="upload-wrap">
         <input type="file" id="file" class="file-input-hidden" accept="image/*">
-        <label for="file" class="upload-label">📷 Upload Leaf Image</label>
+        <label for="file" class="upload-label">Upload leaf image</label>
         <p id="fileName" class="file-name">No file selected</p>
     </div>
 
-    <div class="actions">
-        <button type="button" id="detectBtn" onclick="sendImage()">Detect Disease</button>
+    <div class="preview-wrap">
+        <span id="previewPlaceholder" class="preview-placeholder">Preview appears after you choose an image</span>
+        <img id="preview" alt="Selected leaf preview" />
     </div>
 
-    <img id="preview" alt="" />
+    <p class="section-title">2 · Analyze</p>
+    <button type="button" id="detectBtn" onclick="sendImage()">Analyze leaf</button>
 
     <div id="output"></div>
 </div>
 
 <script>
-document.getElementById("file").addEventListener("change", function () {
-    const f = this.files[0];
-    document.getElementById("fileName").textContent = f ? f.name : "No file selected";
-});
+(function () {
+    const fileInput = document.getElementById("file");
+    const fileNameEl = document.getElementById("fileName");
+    const preview = document.getElementById("preview");
+    const placeholder = document.getElementById("previewPlaceholder");
+
+    fileInput.addEventListener("change", function () {
+        const f = this.files[0];
+        fileNameEl.textContent = f ? f.name : "No file selected";
+        if (f) {
+            preview.src = URL.createObjectURL(f);
+            preview.classList.add("visible");
+            placeholder.style.display = "none";
+        } else {
+            preview.classList.remove("visible");
+            preview.removeAttribute("src");
+            placeholder.style.display = "";
+        }
+    });
+})();
+
+function fmtTop2(items) {
+    if (!items || !items.length) return "";
+    return "<ul class=\"top2-list\">" + items.map(function (x) {
+        return "<li><strong>" + escapeHtml(x.label) + "</strong> — " + x.confidence + "%</li>";
+    }).join("") + "</ul>";
+}
+
+function escapeHtml(s) {
+    const d = document.createElement("div");
+    d.textContent = s;
+    return d.innerHTML;
+}
 
 function sendImage() {
     const fileInput = document.getElementById("file");
@@ -225,89 +302,74 @@ function sendImage() {
     const file = fileInput.files[0];
 
     if (!file) {
-        outputEl.innerText = "Please select an image first.";
+        outputEl.innerHTML = "<div class=\"err-box\">Please choose an image first.</div>";
         return;
     }
 
-    document.getElementById("preview").src = URL.createObjectURL(file);
-
-    detectBtn.innerText = "Detecting...";
-    outputEl.innerText = "";
+    outputEl.innerHTML = "<div class=\"loading-msg\">Analyzing…</div>";
     detectBtn.disabled = true;
+    detectBtn.textContent = "Analyzing…";
 
     const formData = new FormData();
     formData.append("file", file);
 
-    fetch("http://127.0.0.1:5000/predict", {
-        method: "POST",
-        body: formData
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.error) {
-            outputEl.innerText = "Error: " + data.error;
-            return;
-        }
+    fetch("http://127.0.0.1:5000/predict", { method: "POST", body: formData })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+            if (data.error) {
+                outputEl.innerHTML = "<div class=\"err-box\">" + escapeHtml(data.error) + "</div>";
+                return;
+            }
 
-        const disease = data.disease;
-        const explanation = data.explanation || "";
-        const treatment = data.treatment || "";
-        const conf = data.confidence;
+            if (data.status === "invalid") {
+                outputEl.innerHTML =
+                    "<div class=\"result-card invalid\">" +
+                    "<div class=\"result-head\">Not a leaf photo</div>" +
+                    "<div class=\"row\"><span class=\"val\">" + escapeHtml(data.message || "") + "</span></div>" +
+                    "</div>";
+                return;
+            }
 
-        if (disease === "Uncertain") {
+            if (data.status === "uncertain") {
+                outputEl.innerHTML =
+                    "<div class=\"result-card warn\">" +
+                    "<div class=\"result-head\">Low confidence</div>" +
+                    "<div class=\"row\"><span class=\"val\">" + escapeHtml(data.message || "") + "</span></div>" +
+                    "</div>";
+                return;
+            }
+
+            if (data.status !== "ok") {
+                outputEl.innerHTML = "<div class=\"err-box\">Unexpected response.</div>";
+                return;
+            }
+
+            const d = data.disease;
+            const cardClass = d === "Healthy" ? "healthy" : "disease";
+            const head = d === "Healthy" ? "Healthy leaf" : d;
+            const icon = d === "Healthy" ? "✅ " : "⚠️ ";
+
             outputEl.innerHTML =
-                `<div class="result-card uncertain">
-                    <div class="disease-name">⚠️ Not sure about this image</div>
-                    <p class="friendly-note">Please upload a clearer apple leaf image (avoid fruit or background)</p>
-                    <div class="row">
-                        <span class="label">Confidence</span>
-                        <strong>${conf}%</strong>
-                    </div>
-                    <div class="row">
-                        <span class="label">Note</span>
-                        ${explanation}
-                    </div>
-                    <div class="row">
-                        <span class="label">What to do</span>
-                        ${treatment}
-                    </div>
-                </div>`;
-            return;
-        }
-
-        let cardClass = "disease";
-        let titleHtml = "";
-        if (disease === "Healthy") {
-            cardClass = "healthy";
-            titleHtml = `<div class="disease-name">✅ Healthy</div>`;
-        } else {
-            titleHtml = `<div class="disease-name">⚠️ ${disease}</div>`;
-        }
-
-        outputEl.innerHTML =
-            `<div class="result-card ${cardClass}">
-                ${titleHtml}
-                <div class="row">
-                    <span class="label">Confidence</span>
-                    <strong>${conf}%</strong>
-                </div>
-                <div class="row">
-                    <span class="label">Explanation</span>
-                    ${explanation}
-                </div>
-                <div class="row">
-                    <span class="label">Treatment</span>
-                    ${treatment}
-                </div>
-            </div>`;
-    })
-    .catch(err => {
-        outputEl.innerText = "Error: " + err;
-    })
-    .finally(() => {
-        detectBtn.innerText = "Detect Disease";
-        detectBtn.disabled = false;
-    });
+                "<div class=\"result-card " + cardClass + "\">" +
+                "<div class=\"result-head\">" + icon + escapeHtml(head) + "</div>" +
+                "<div class=\"row\"><span class=\"lbl\">Confidence</span><span class=\"val\"><strong>" +
+                escapeHtml(String(data.confidence)) + "%</strong></span></div>" +
+                "<div class=\"row\"><span class=\"lbl\">Top two classes</span>" + fmtTop2(data.top2) + "</div>" +
+                "<div class=\"row\"><span class=\"lbl\">Explanation</span><span class=\"val\">" +
+                escapeHtml(data.explanation || "") + "</span></div>" +
+                "<div class=\"row\"><span class=\"lbl\">Severity</span><span class=\"val\">" +
+                escapeHtml(data.severity || "—") + "</span></div>" +
+                "<div class=\"row\"><span class=\"lbl\">Treatment</span><span class=\"val\">" +
+                escapeHtml(data.treatment || "") + "</span></div>" +
+                "</div>";
+        })
+        .catch(function (err) {
+            outputEl.innerHTML = "<div class=\"err-box\">Network error. Is the API running?</div>";
+        })
+        .finally(function () {
+            detectBtn.disabled = false;
+            detectBtn.textContent = "Analyze leaf";
+        });
 }
 </script>
 
