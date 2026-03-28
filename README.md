@@ -1,30 +1,54 @@
-# 🌱 Smart Orchard AI — Apple Disease Detection\## ⚡ Built with Cursor
+# 🌱 LeafIQ — AI-Powered Apple Disease Detection
 
-This project was developed using Cursor AI, which accelerated backend development, debugging, and UI improvements.
+LeafIQ is an intelligent decision-support system that detects apple leaf diseases using deep learning, while also handling uncertainty to avoid misleading predictions.
 
-AI-powered system to detect apple leaf diseases using image classification.
+---
 
 ## 🚀 Features
-- Detects:
+
+- 🍃 Detects:
   - Apple Scab
   - Black Rot
   - Rust
   - Healthy
-- Confidence-based prediction
-- Uncertainty handling (avoids wrong predictions)
-- Explanation for predictions
-- Simple web interface
 
-## 🧠 Tech Stack
-- TensorFlow / Keras (MobileNetV2)
-- Flask (Backend)
-- HTML/CSS/JS (Frontend)
+- 📊 Top-2 Predictions with confidence scores  
+- ⚠️ Uncertainty Handling (avoids wrong predictions)  
+- 🧠 Confidence Reasoning (explains why model is confident)  
+- 🩺 Disease Explanation & Severity Estimation  
+- 🌾 Farmer-Friendly Treatment Suggestions  
+- 🖼️ Input Validation (rejects non-leaf images)
 
-## 📊 Dataset
-- Trained on 7000+ images (PlantVillage dataset)
+---
 
-## ⚙️ How to Run
+## 🧠 How It Works
+
+1. User uploads a leaf image  
+2. Image is validated (ensures it's a leaf)  
+3. Model predicts disease using deep learning  
+4. System returns:
+   - Prediction (Top-2)
+   - Confidence score
+   - Explanation
+   - Treatment
+   - Severity
+   - Confidence reasoning  
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** HTML, CSS, JavaScript  
+- **Backend:** Flask (Python)  
+- **Model:** TensorFlow / Keras (MobileNet-based)  
+- **Deployment:** Vercel (Frontend), Render (Backend)
+
+---
+
+## ⚙️ Setup Instructions
+
+### 1. Clone Repository
 
 ```bash
-pip install -r requirements.txt
-python app.py
+git clone https://github.com/luffy69a/smart-orchard-ai.git
+cd smart-orchard-ai
