@@ -4,371 +4,677 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Smart Orchard AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        * { box-sizing: border-box; }
+        /* ------------------------------------------------------------------
+           Design tokens — SaaS neutral + semantic accents
+           ------------------------------------------------------------------ */
+        :root {
+            --bg-page: #f5f7fb;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --text-muted: #94a3b8;
+            --border-subtle: #e2e8f0;
+            --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 4px 16px rgba(15, 23, 42, 0.07), 0 2px 6px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 12px 40px rgba(15, 23, 42, 0.09);
+            --radius: 14px;
+            --radius-sm: 12px;
+            --accent-green: #16a34a;
+            --accent-red: #dc2626;
+            --accent-warn: #f59e0b;
+            --accent-info: #2563eb;
+            --font: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
 
         body {
             margin: 0;
-            font-family: "Segoe UI", system-ui, Arial, sans-serif;
-            background: linear-gradient(145deg, #1b5e20 0%, #43a047 40%, #81c784 100%);
             min-height: 100vh;
-            color: #333;
-            padding: 28px 16px 48px;
+            font-family: var(--font);
+            font-size: 15px;
+            line-height: 1.5;
+            color: var(--text-primary);
+            background: var(--bg-page);
+            -webkit-font-smoothing: antialiased;
         }
 
-        .container {
-            max-width: 540px;
+        /* ------------------------------------------------------------------
+           Header
+           ------------------------------------------------------------------ */
+        .site-header {
+            max-width: 640px;
             margin: 0 auto;
-            background: #fff;
-            padding: 36px 28px 40px;
-            border-radius: 22px;
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.18), 0 4px 16px rgba(0, 0, 0, 0.08);
+            padding: 28px 20px 8px;
             text-align: center;
         }
 
-        h1 {
-            margin: 0 0 10px 0;
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #1b5e20;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            color: #555;
-            margin: 0 0 28px 0;
-            line-height: 1.55;
-            max-width: 420px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .section-title {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-            color: #888;
-            margin: 20px 0 10px 0;
-        }
-
-        .file-input-hidden {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            border: 0;
-        }
-
-        .upload-wrap {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 4px;
-        }
-
-        .upload-label {
-            display: inline-block;
-            padding: 14px 28px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #fff;
-            background: linear-gradient(135deg, #2e7d32, #66bb6a);
-            border-radius: 14px;
-            cursor: pointer;
-            box-shadow: 0 8px 24px rgba(46, 125, 50, 0.35);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-
-        .upload-label:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 32px rgba(46, 125, 50, 0.45);
-        }
-
-        .file-name {
-            font-size: 13px;
-            color: #666;
+        .site-header__title {
             margin: 0;
-            min-height: 1.35em;
-            word-break: break-all;
-            max-width: 100%;
+            font-size: 1.35rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--text-primary);
         }
 
-        .preview-wrap {
-            margin-top: 22px;
-            min-height: 120px;
+        .site-header__tagline {
+            margin: 6px 0 0;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        /* ------------------------------------------------------------------
+           Main shell
+           ------------------------------------------------------------------ */
+        .app-shell {
+            max-width: 640px;
+            margin: 0 auto 48px;
+            padding: 0 20px;
+        }
+
+        .main-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-subtle);
+            padding: 28px 28px 32px;
+        }
+
+        .main-card__section-label {
+            margin: 0 0 12px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+        }
+
+        /* ------------------------------------------------------------------
+           Upload — drag & drop
+           ------------------------------------------------------------------ */
+        .upload-zone {
+            position: relative;
+            border: 2px dashed #cbd5e1;
+            border-radius: var(--radius-sm);
+            padding: 32px 20px;
+            text-align: center;
+            background: #fafbfc;
+            transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .upload-zone:hover,
+        .upload-zone:focus-within {
+            border-color: var(--accent-green);
+            background: #f0fdf4;
+        }
+
+        .upload-zone--dragover {
+            border-color: var(--accent-green);
+            background: #ecfdf3;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.15);
+        }
+
+        .upload-zone__text {
+            margin: 0;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .upload-zone__hint {
+            margin: 6px 0 0;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .file-input-visual-hide {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-meta {
+            margin-top: 12px;
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            text-align: center;
+            word-break: break-all;
+        }
+
+        /* ------------------------------------------------------------------
+           Preview
+           ------------------------------------------------------------------ */
+        .preview-block {
+            margin-top: 24px;
+            min-height: 140px;
             display: flex;
             justify-content: center;
             align-items: center;
+            border-radius: var(--radius-sm);
+            background: var(--bg-page);
+            border: 1px solid var(--border-subtle);
+            overflow: hidden;
         }
 
-        #preview {
+        .preview-block__placeholder {
+            padding: 32px 20px;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        .preview-block__img {
             display: none;
             max-width: 100%;
-            width: 280px;
+            max-height: 280px;
+            width: auto;
             height: auto;
-            border-radius: 16px;
-            box-shadow: 0 10px 32px rgba(0, 0, 0, 0.14);
-            object-fit: cover;
+            object-fit: contain;
+            vertical-align: middle;
         }
 
-        #preview.visible {
+        .preview-block__img.is-visible {
             display: block;
         }
 
-        .preview-placeholder {
-            font-size: 13px;
-            color: #aaa;
-            padding: 24px 16px;
-        }
-
-        #detectBtn {
-            margin-top: 22px;
-            padding: 14px 32px;
-            font-size: 15px;
+        /* ------------------------------------------------------------------
+           Primary button
+           ------------------------------------------------------------------ */
+        .btn-primary {
+            margin-top: 24px;
+            width: 100%;
+            padding: 14px 22px;
+            font-family: var(--font);
+            font-size: 0.9375rem;
             font-weight: 600;
-            border: none;
-            border-radius: 14px;
-            background: linear-gradient(135deg, #1b5e20, #388e3c);
             color: #fff;
+            background: linear-gradient(180deg, #22c55e 0%, var(--accent-green) 100%);
+            border: none;
+            border-radius: var(--radius-sm);
             cursor: pointer;
-            box-shadow: 0 8px 24px rgba(27, 94, 32, 0.35);
-            transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: var(--shadow-sm), 0 4px 12px rgba(22, 163, 74, 0.25);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
         }
 
-        #detectBtn:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 30px rgba(27, 94, 32, 0.4);
+        .btn-primary:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-sm), 0 8px 20px rgba(22, 163, 74, 0.32);
         }
 
-        #detectBtn:disabled {
-            opacity: 0.6;
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.99);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.55;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
 
-        #output {
-            margin-top: 26px;
-            text-align: left;
-            font-size: 14px;
+        /* ------------------------------------------------------------------
+           Output area
+           ------------------------------------------------------------------ */
+        .output {
+            margin-top: 28px;
         }
 
-        .result-card {
-            padding: 22px 20px;
-            border-radius: 18px;
-            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.06), 0 8px 28px rgba(0, 0, 0, 0.1);
-        }
-
-        .result-card.healthy {
-            background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 100%);
-            color: #1b5e20;
-        }
-
-        .result-card.disease {
-            background: linear-gradient(180deg, #ffebee 0%, #ffcdd2 100%);
-            color: #b71c1c;
-        }
-
-        .result-card.warn {
-            background: linear-gradient(180deg, #fff8e1 0%, #ffecb3 100%);
-            color: #e65100;
-            border: 1px solid #ffe082;
-        }
-
-        .result-card.invalid {
-            background: #fce4ec;
-            color: #880e4f;
-            border: 1px solid #f48fb1;
-        }
-
-        .result-head {
-            font-size: 1.35rem;
-            font-weight: 700;
-            margin: 0 0 16px 0;
-            line-height: 1.25;
-        }
-
-        .row {
-            margin: 14px 0 0 0;
-            line-height: 1.5;
-        }
-
-        .row .lbl {
-            display: block;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            opacity: 0.85;
-            margin-bottom: 4px;
-        }
-
-        .row .val {
-            font-size: 15px;
-        }
-
-        .top2-list {
-            margin: 6px 0 0 0;
-            padding-left: 18px;
-        }
-
-        .top2-list li {
-            margin: 6px 0;
-        }
-
-        .loading-msg {
-            text-align: center;
-            color: #555;
-            padding: 16px;
+        .loading-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 14px;
+            padding: 28px 16px;
+            color: var(--text-secondary);
+            font-size: 0.9375rem;
             font-weight: 500;
         }
 
-        .err-box {
-            padding: 18px;
-            border-radius: 14px;
-            background: #ffebee;
-            color: #c62828;
-            text-align: center;
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--border-subtle);
+            border-top-color: var(--accent-green);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Alerts */
+        .alert {
+            padding: 16px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .alert--error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .alert--warn {
+            background: #fffbeb;
+            border: 1px solid #fde68a;
+            color: #92400e;
+        }
+
+        .alert__title {
+            font-weight: 600;
+            margin: 0 0 6px;
+            font-size: 0.9375rem;
+        }
+
+        .alert p { margin: 0; }
+
+        /* Result panel */
+        .result-panel {
+            border-radius: var(--radius-sm);
+            padding: 22px 22px 24px;
+            border: 1px solid var(--border-subtle);
+            background: var(--bg-card);
+            box-shadow: var(--shadow-sm);
+            animation: fadeIn 0.35s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-panel--healthy {
+            border-left: 4px solid var(--accent-green);
+            background: linear-gradient(90deg, #f0fdf4 0%, #fff 28%);
+        }
+
+        .result-panel--disease {
+            border-left: 4px solid var(--accent-red);
+            background: linear-gradient(90deg, #fef2f2 0%, #fff 28%);
+        }
+
+        .result-panel__head {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .result-panel__disease {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            color: var(--text-primary);
+        }
+
+        .result-panel__meta {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .confidence-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 12px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #fff;
+            border-radius: 999px;
+            background: var(--accent-info);
+        }
+
+        .confidence-pill--high {
+            background: var(--accent-green);
+        }
+
+        .confidence-pill--mid {
+            background: var(--accent-warn);
+        }
+
+        .severity-pill {
+            display: inline-block;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            border-radius: 999px;
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .severity-pill--mild {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .severity-pill--moderate {
+            background: #ffedd5;
+            color: #9a3412;
+        }
+
+        .severity-pill--severe {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .severity-pill--na {
+            background: #f1f5f9;
+            color: var(--text-secondary);
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .result-block {
+            margin-top: 18px;
+            padding-top: 18px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .result-block:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .result-block__label {
+            margin: 0 0 8px;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: var(--text-muted);
+        }
+
+        .result-block__text {
+            margin: 0;
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+            line-height: 1.55;
+        }
+
+        .top2-compact {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .top2-compact li { margin: 4px 0; }
+
+        .reasoning-list {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+        }
+
+        .reasoning-list li { margin: 6px 0; }
+
+        .bullet-list {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 0.9375rem;
+            color: var(--text-primary);
+        }
+
+        .bullet-list li { margin: 8px 0; line-height: 1.5; }
+
+        .main-card__section-label--spaced {
+            margin-top: 24px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>Smart Orchard AI</h1>
-    <p class="subtitle">Upload a close-up of an apple leaf for disease screening and simple care steps.</p>
+<header class="site-header">
+    <h1 class="site-header__title">Smart Orchard AI</h1>
+    <p class="site-header__tagline">AI-powered plant disease detection</p>
+</header>
 
-    <p class="section-title">1 · Photo</p>
-    <div class="upload-wrap">
-        <input type="file" id="file" class="file-input-hidden" accept="image/*">
-        <label for="file" class="upload-label">Upload leaf image</label>
-        <p id="fileName" class="file-name">No file selected</p>
+<main class="app-shell">
+    <div class="main-card">
+        <p class="main-card__section-label">Upload</p>
+
+        <div class="upload-zone" id="dropZone" role="button" tabindex="0">
+            <input type="file" id="file" class="file-input-visual-hide" accept="image/*" aria-label="Upload leaf image">
+            <p class="upload-zone__text">Upload a leaf image</p>
+            <p class="upload-zone__hint">Drag &amp; drop here, or click to browse</p>
+        </div>
+        <p id="fileName" class="file-meta">No file selected</p>
+
+        <p class="main-card__section-label main-card__section-label--spaced">Preview</p>
+        <div class="preview-block">
+            <span id="previewPlaceholder" class="preview-block__placeholder">No image yet</span>
+            <img id="preview" class="preview-block__img" alt="Leaf preview">
+        </div>
+
+        <button type="button" class="btn-primary" id="detectBtn" onclick="sendImage()">Analyze Leaf</button>
+
+        <div id="output" class="output"></div>
     </div>
-
-    <div class="preview-wrap">
-        <span id="previewPlaceholder" class="preview-placeholder">Preview appears after you choose an image</span>
-        <img id="preview" alt="Selected leaf preview" />
-    </div>
-
-    <p class="section-title">2 · Analyze</p>
-    <button type="button" id="detectBtn" onclick="sendImage()">Analyze leaf</button>
-
-    <div id="output"></div>
-</div>
+</main>
 
 <script>
 (function () {
-    const fileInput = document.getElementById("file");
-    const fileNameEl = document.getElementById("fileName");
-    const preview = document.getElementById("preview");
-    const placeholder = document.getElementById("previewPlaceholder");
+    var dropZone = document.getElementById("dropZone");
+    var fileInput = document.getElementById("file");
+    var fileNameEl = document.getElementById("fileName");
+    var preview = document.getElementById("preview");
+    var placeholder = document.getElementById("previewPlaceholder");
 
-    fileInput.addEventListener("change", function () {
-        const f = this.files[0];
+    function setFile(file) {
+        if (!file || !file.type.match(/^image\//)) return;
+        var dt = new DataTransfer();
+        dt.items.add(file);
+        fileInput.files = dt.files;
+        fileInput.dispatchEvent(new Event("change", { bubbles: true }));
+    }
+
+    function onFileChosen() {
+        var f = fileInput.files[0];
         fileNameEl.textContent = f ? f.name : "No file selected";
         if (f) {
             preview.src = URL.createObjectURL(f);
-            preview.classList.add("visible");
+            preview.classList.add("is-visible");
             placeholder.style.display = "none";
         } else {
-            preview.classList.remove("visible");
+            preview.classList.remove("is-visible");
             preview.removeAttribute("src");
             placeholder.style.display = "";
+        }
+    }
+
+    fileInput.addEventListener("change", onFileChosen);
+
+    ["dragenter", "dragover"].forEach(function (ev) {
+        dropZone.addEventListener(ev, function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.add("upload-zone--dragover");
+        });
+    });
+
+    ["dragleave", "drop"].forEach(function (ev) {
+        dropZone.addEventListener(ev, function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            dropZone.classList.remove("upload-zone--dragover");
+        });
+    });
+
+    dropZone.addEventListener("drop", function (e) {
+        var f = e.dataTransfer.files[0];
+        if (f) setFile(f);
+    });
+
+    dropZone.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            fileInput.click();
         }
     });
 })();
 
-function fmtTop2(items) {
-    if (!items || !items.length) return "";
-    return "<ul class=\"top2-list\">" + items.map(function (x) {
-        return "<li><strong>" + escapeHtml(x.label) + "</strong> — " + x.confidence + "%</li>";
-    }).join("") + "</ul>";
-}
-
 function escapeHtml(s) {
-    const d = document.createElement("div");
-    d.textContent = s;
+    var d = document.createElement("div");
+    d.textContent = s == null ? "" : String(s);
     return d.innerHTML;
 }
 
+function treatmentToBullets(text) {
+    if (!text) return "<p class=\"result-block__text\">—</p>";
+    var parts = text.split(/\.\s+/).map(function (p) { return p.trim(); }).filter(Boolean);
+    if (parts.length <= 1) {
+        parts = text.split(/;\s+/).map(function (p) { return p.trim(); }).filter(Boolean);
+    }
+    if (!parts.length) return "<p class=\"result-block__text\">" + escapeHtml(text) + "</p>";
+    var html = parts.map(function (p) {
+        return "<li>" + escapeHtml(p.replace(/\.$/, "")) + "</li>";
+    }).join("");
+    return "<ul class=\"bullet-list\">" + html + "</ul>";
+}
+
+function severityPillClass(sev) {
+    if (!sev || sev === "—") return "severity-pill severity-pill--na";
+    var s = String(sev).toLowerCase();
+    if (s.indexOf("mild") >= 0) return "severity-pill severity-pill--mild";
+    if (s.indexOf("moderate") >= 0) return "severity-pill severity-pill--moderate";
+    if (s.indexOf("severe") >= 0) return "severity-pill severity-pill--severe";
+    return "severity-pill severity-pill--na";
+}
+
+function confidencePillClass(pct) {
+    if (pct >= 85) return "confidence-pill confidence-pill--high";
+    if (pct >= 70) return "confidence-pill confidence-pill--mid";
+    return "confidence-pill";
+}
+
+function fmtTop2Compact(items) {
+    if (!items || !items.length) return "";
+    return "<ul class=\"top2-compact\">" + items.map(function (x) {
+        return "<li><strong>" + escapeHtml(x.label) + "</strong> — " + escapeHtml(String(x.confidence)) + "%</li>";
+    }).join("") + "</ul>";
+}
+
+function buildReasoningList(data) {
+    var lines = [];
+    var pct = Number(data.confidence);
+    lines.push("Primary class <strong>" + escapeHtml(data.disease) + "</strong> scored <strong>" + escapeHtml(String(data.confidence)) + "%</strong> after calibration.");
+    if (data.top2 && data.top2.length > 1) {
+        var r = data.top2[1];
+        lines.push("Second choice: <strong>" + escapeHtml(r.label) + "</strong> at " + escapeHtml(String(r.confidence)) + "%.");
+        var gap = pct - Number(r.confidence);
+        lines.push("Separation: " + escapeHtml(String(Math.round(gap * 10) / 10)) + " percentage points (larger = more decisive).");
+    }
+    return "<ul class=\"reasoning-list\">" + lines.map(function (l) { return "<li>" + l + "</li>"; }).join("") + "</ul>";
+}
+
 function sendImage() {
-    const fileInput = document.getElementById("file");
-    const detectBtn = document.getElementById("detectBtn");
-    const outputEl = document.getElementById("output");
-    const file = fileInput.files[0];
+    var fileInput = document.getElementById("file");
+    var detectBtn = document.getElementById("detectBtn");
+    var outputEl = document.getElementById("output");
+    var file = fileInput.files[0];
 
     if (!file) {
-        outputEl.innerHTML = "<div class=\"err-box\">Please choose an image first.</div>";
+        outputEl.innerHTML = "<div class=\"alert alert--error\"><p class=\"alert__title\">No image</p><p>Please upload a leaf image first.</p></div>";
         return;
     }
 
-    outputEl.innerHTML = "<div class=\"loading-msg\">Analyzing…</div>";
+    outputEl.innerHTML = "<div class=\"loading-panel\"><div class=\"spinner\" aria-hidden=\"true\"></div><span>Analyzing leaf…</span></div>";
     detectBtn.disabled = true;
-    detectBtn.textContent = "Analyzing…";
 
-    const formData = new FormData();
+    var formData = new FormData();
     formData.append("file", file);
 
     fetch("http://127.0.0.1:5000/predict", { method: "POST", body: formData })
         .then(function (res) { return res.json(); })
         .then(function (data) {
             if (data.error) {
-                outputEl.innerHTML = "<div class=\"err-box\">" + escapeHtml(data.error) + "</div>";
+                outputEl.innerHTML = "<div class=\"alert alert--error\"><p class=\"alert__title\">Error</p><p>" + escapeHtml(data.error) + "</p></div>";
                 return;
             }
 
             if (data.status === "invalid") {
                 outputEl.innerHTML =
-                    "<div class=\"result-card invalid\">" +
-                    "<div class=\"result-head\">Not a leaf photo</div>" +
-                    "<div class=\"row\"><span class=\"val\">" + escapeHtml(data.message || "") + "</span></div>" +
-                    "</div>";
+                    "<div class=\"alert alert--error\">" +
+                    "<p class=\"alert__title\">Invalid image</p>" +
+                    "<p>" + escapeHtml(data.message || "") + "</p></div>";
                 return;
             }
 
             if (data.status === "uncertain") {
                 outputEl.innerHTML =
-                    "<div class=\"result-card warn\">" +
-                    "<div class=\"result-head\">Low confidence</div>" +
-                    "<div class=\"row\"><span class=\"val\">" + escapeHtml(data.message || "") + "</span></div>" +
-                    "</div>";
+                    "<div class=\"alert alert--warn\">" +
+                    "<p class=\"alert__title\">Low confidence</p>" +
+                    "<p>" + escapeHtml(data.message || "") + "</p></div>";
                 return;
             }
 
             if (data.status !== "ok") {
-                outputEl.innerHTML = "<div class=\"err-box\">Unexpected response.</div>";
+                outputEl.innerHTML = "<div class=\"alert alert--error\"><p class=\"alert__title\">Unexpected response</p><p>Try again.</p></div>";
                 return;
             }
 
-            const d = data.disease;
-            const cardClass = d === "Healthy" ? "healthy" : "disease";
-            const head = d === "Healthy" ? "Healthy leaf" : d;
-            const icon = d === "Healthy" ? "✅ " : "⚠️ ";
+            var d = data.disease;
+            var panelClass = d === "Healthy" ? "result-panel--healthy" : "result-panel--disease";
+            var title = d === "Healthy" ? "Healthy" : d;
+            var pct = Number(data.confidence);
+            var confPill = confidencePillClass(pct);
 
             outputEl.innerHTML =
-                "<div class=\"result-card " + cardClass + "\">" +
-                "<div class=\"result-head\">" + icon + escapeHtml(head) + "</div>" +
-                "<div class=\"row\"><span class=\"lbl\">Confidence</span><span class=\"val\"><strong>" +
-                escapeHtml(String(data.confidence)) + "%</strong></span></div>" +
-                "<div class=\"row\"><span class=\"lbl\">Top two classes</span>" + fmtTop2(data.top2) + "</div>" +
-                "<div class=\"row\"><span class=\"lbl\">Explanation</span><span class=\"val\">" +
-                escapeHtml(data.explanation || "") + "</span></div>" +
-                "<div class=\"row\"><span class=\"lbl\">Severity</span><span class=\"val\">" +
-                escapeHtml(data.severity || "—") + "</span></div>" +
-                "<div class=\"row\"><span class=\"lbl\">Treatment</span><span class=\"val\">" +
-                escapeHtml(data.treatment || "") + "</span></div>" +
+                "<div class=\"result-panel " + panelClass + "\">" +
+                "<div class=\"result-panel__head\">" +
+                "<h2 class=\"result-panel__disease\">" + escapeHtml(title) + "</h2>" +
+                "<div class=\"result-panel__meta\">" +
+                "<span class=\"" + confPill + "\">" + escapeHtml(String(data.confidence)) + "% confidence</span>" +
+                "<span class=\"" + severityPillClass(data.severity) + "\">" + escapeHtml(data.severity || "—") + "</span>" +
+                "</div></div>" +
+
+                "<div class=\"result-block\">" +
+                "<p class=\"result-block__label\">Likely classes (top 2)</p>" +
+                fmtTop2Compact(data.top2) +
+                "</div>" +
+
+                "<div class=\"result-block\">" +
+                "<p class=\"result-block__label\">Explanation</p>" +
+                "<p class=\"result-block__text\">" + escapeHtml(data.explanation || "") + "</p>" +
+                "</div>" +
+
+                "<div class=\"result-block\">" +
+                "<p class=\"result-block__label\">Recommended steps</p>" +
+                treatmentToBullets(data.treatment || "") +
+                "</div>" +
+
+                "<div class=\"result-block\">" +
+                "<p class=\"result-block__label\">Confidence reasoning</p>" +
+                buildReasoningList(data) +
+                "</div>" +
                 "</div>";
         })
-        .catch(function (err) {
-            outputEl.innerHTML = "<div class=\"err-box\">Network error. Is the API running?</div>";
+        .catch(function () {
+            outputEl.innerHTML = "<div class=\"alert alert--error\"><p class=\"alert__title\">Connection issue</p><p>Check that the API is running.</p></div>";
         })
         .finally(function () {
             detectBtn.disabled = false;
-            detectBtn.textContent = "Analyze leaf";
         });
 }
 </script>
